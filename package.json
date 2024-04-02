@@ -1,0 +1,12 @@
+{
+  "name": "Study.io",
+  "version": "1.0.0",
+  "description": "repository for the Educate Hacks hackathon project, Study.io, an AI automated SaaS to help manage studying efficiently and productively",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
