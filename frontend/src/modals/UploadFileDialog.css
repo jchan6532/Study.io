@@ -1,0 +1,9 @@
+.upload-video-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 3px dashed #ccc;
+  padding: 1.3rem;
+  border-radius: 1rem;
+  gap: 1.5rem;
+}

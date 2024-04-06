@@ -13,11 +13,14 @@ import Form from "./scenes/form";
 import Calendar from "./scenes/calendar";
 import Login from "./scenes/login/index.jsx";
 import { useAuthContext } from "./contexts/AuthContext.jsx";
+import UploadFileDialog from "./modals/UploadFileDialog.jsx";
+import { useState } from "react";
 
 
 function App() {
   const [theme, colorMode] = useMode();
   const { isLoggedIn } = useAuthContext();
+  const [fileDialogOpen, setFileDialogOpen] = useState(true);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -38,6 +41,8 @@ function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/login" element={<Login />} />
             </Routes>
+
+            {isLoggedIn && <UploadFileDialog />}
           </main>
         </div>
       </ThemeProvider>
