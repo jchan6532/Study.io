@@ -18,10 +18,16 @@ const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
-    const { login, logout, isLoggedIn } = useAuthContext();
+    const { logout, isLoggedIn } = useAuthContext();
     const navigate = useNavigate();
 
-    useEffect(() => console.log(isLoggedIn), [isLoggedIn]);
+    const handleLogout = () => {
+      if(isLoggedIn){
+        logout();
+        navigate('/login');
+      }
+    }
+
     return (
         <Box
           display="flex" 
@@ -55,17 +61,8 @@ const Topbar = () => {
               <IconButton>
                 <PersonOutlinedIcon />
               </IconButton>
-              <IconButton onClick={() => {
-                if(isLoggedIn){
-                  logout();
-                  navigate('/login');
-                }
-                else{
-                  login();
-                  navigate('/login');
-                }
-              }}>
-                {isLoggedIn ? (<LogoutIcon />) : (<LoginIcon />)}
+              <IconButton onClick={handleLogout}>
+                <LogoutIcon />
               </IconButton>
             </Box>
         </Box>

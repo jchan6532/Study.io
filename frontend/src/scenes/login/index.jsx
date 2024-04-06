@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,11 +11,14 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { useColorScheme } from '@mui/material/styles';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { ColorModeContext, tokens } from "../../theme";
+import { useTheme } from '@mui/material';
+import './login.css'
 
-function Copyright(props) {
+const Copyright = (props) => {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -32,43 +36,61 @@ function Copyright(props) {
   );
 }
 
-const ModeToggle = () => {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <Button variant="soft">Change mode</Button>;
-  }
+const ModeToggle = (toggle) => {
+  const theme = useTheme();
 
   return (
     <Box m={'15px'}>
       <Button
         variant="soft"
-        onClick={() => {
-          setMode(mode === 'light' ? 'dark' : 'light');
-        }}
+        onClick={toggle}
       >
-        {mode === 'light' ? <DarkModeIcon /> : <WbSunnyIcon />}
+        {theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <DarkModeIcon />}
       </Button>
     </Box>
   );
 }
 
-export default function SignInSide() {
+const Login = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
+  const navigate = useNavigate();
+  const { login, isLoggedIn, logout } = useAuthContext();
+  const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if(isLoggedIn)  {
+      navigate('/');
+    }
+
+    const savedLoginData = localStorage.getItem('loginData');
+    if (savedLoginData) {
+      const { email, password, rememberMe } = JSON.parse(savedLoginData);
+      setEmail(email);
+      setPassword(password);
+      setRememberMe(rememberMe);
+    }
+  }, []);
+
+  const handleRememberMeChanged = (event) => {
+    setRememberMe(event.target.checked);
+  };
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
 
+    if (rememberMe) localStorage.setItem('loginData', JSON.stringify({ email, password, rememberMe }));
+    else localStorage.removeItem('loginData');
+
+    login();
+    navigate('/');
+  };
+  
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main" sx={{ height: '100vh' }} backgroundColor={colors.primary[400]} >
       <Grid
         item
         xs={false}
@@ -77,14 +99,13 @@ export default function SignInSide() {
         sx={{
           backgroundImage: 'url(../../assets/studyio-logo.jpg)',
           backgroundRepeat: 'no-repeat',
-          backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundColor: `${theme.palette.mode === 'dark' ? colors.grey[500] : colors.grey[900]}`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <ModeToggle />
+        {ModeToggle(colorMode.toggleColorMode)}
         <Box
           sx={{
             my: 8,
@@ -100,7 +121,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, pl: 5, pr: 5 }}>
             <TextField
               margin="normal"
               required
@@ -110,6 +131,8 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -120,28 +143,43 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" checked={rememberMe} color="default"/>}
               label="Remember me"
+              onChange={handleRememberMeChanged}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2}}
             >
               Sign In
             </Button>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Button
+                variant="contained"
+                className="button-style"
+                startIcon={<img height="28" alt="Google logo" src="/assets/google-logo.svg" />}
+              >
+                <Typography variant="button" color="text.secondary" noWrap align='center'>
+                  Sign in with Google
+                </Typography>
+              </Button>
+            </Box>
+            <br />
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" color="text.secondary">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="#" variant="body2" color="text.secondary">
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>
@@ -152,3 +190,5 @@ export default function SignInSide() {
     </Grid>
   );
 }
+
+export default Login;
