@@ -25,11 +25,6 @@ const SideBarItemTitles = {
   '/contacts': 'Contacts Information',
   '/invoices': 'Invoices Balances',
   '/form': 'Profile Form',
-  '/calendar': 'Calendar',
-  '/faq': 'FAQ Page',
-  '/bar': 'Bar Chart',
-  '/pie': 'Pie Chart',
-  '/line': 'Line Chart',
   '/quizzes': 'Quizzes'
 }
 
@@ -186,49 +181,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title={SideBarItemTitles['/calendar']}
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title={SideBarItemTitles['/faq']}
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
 
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Charts
+              Educational
             </Typography>
-            <Item
-              title={SideBarItemTitles['/bar']}
-              to="/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title={SideBarItemTitles['/pie']}
-              to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title={SideBarItemTitles['/line']}
-              to="/line"
-              icon={<TimelineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <Item
               title={SideBarItemTitles['/quizzes']}
               to="/quizzes"

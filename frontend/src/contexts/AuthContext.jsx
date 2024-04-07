@@ -15,6 +15,8 @@ export const AuthContextProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true); 
   const [user, setUser] = useState(null);
+  const [quizzes, setQuizzes] = useState(null);
+  const [marks, setMarks] = useState([]);
   const {signinProvider} = useSigninProvider();
 
   useEffect(() => {
@@ -71,7 +73,19 @@ export const AuthContextProvider = ({children}) => {
   if(loading) return null;
   
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, googleSignIn, googleSignOut, user }}>
+    <AuthContext.Provider value={{ 
+      isLoggedIn, 
+      login, 
+      logout, 
+      googleSignIn, 
+      googleSignOut, 
+      user, 
+      quizzes, 
+      setQuizzes,
+      marks,
+      setMarks
+    }}
+    >
       {children}
     </AuthContext.Provider>
   );

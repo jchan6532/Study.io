@@ -18,23 +18,31 @@ import UploadFileDialog from "./modals/UploadFileDialog.jsx";
 import Toast from "./components/Toast.jsx";
 import { useEffect, useState } from "react";
 import { useSocketContext } from "./contexts/SocketContext.jsx";
+import useGetQuizzes from "./hooks/useGetQuizzes.js";
 
 
 function App() {
   const [theme, colorMode] = useMode();
-  const { isLoggedIn, user } = useAuthContext();
+  const { isLoggedIn, user, setQuizzes } = useAuthContext();
   const [notifcation, setNotification] = useState(false);
   const [message, setMessage] = useState('');
   const {socket} = useSocketContext();
+  const {fetchQuizzes} = useGetQuizzes();
 
   useEffect(() => {
-    console.log(isLoggedIn, socket);
-    //if (!isLoggedIn) return;
+    if (!isLoggedIn) return;
     if (socket) {
       socket.on(`${user?.uid}`, (data) => {
         console.log(data);
         setMessage(data.message);
         setNotification(true);
+
+        const getQuizzes = async () => {
+          const token = await user?.getIdToken();
+          const data = await fetchQuizzes(token);
+          setQuizzes(data);
+        }
+        getQuizzes();
       });
 
       return () => {

@@ -22,7 +22,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   position: 'relative',
 }));
 
-const QuizCard = ({quiz, click}) => {
+const QuizCard = ({quiz, handleToast}) => {
   const [openQuizModal, setOpenQuizModal] = useState(false);
 
   return (
@@ -50,7 +50,7 @@ const QuizCard = ({quiz, click}) => {
           {moment(quiz.createdAt).fromNow()}
         </Typography>
       </DemoPaper>
-      <QuizModal open={openQuizModal} setOpen={setOpenQuizModal} quiz={quiz}/>
+      <QuizModal open={openQuizModal} setOpen={setOpenQuizModal} quiz={quiz} handleToast={handleToast}/>
     </>
   );
 }

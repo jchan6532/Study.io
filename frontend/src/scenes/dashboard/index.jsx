@@ -2,11 +2,10 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import ProgressCircle from '../../components/ProgressCircle';
-
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import useGetQuizzes from "../../hooks/useGetQuizzes";
 
 const tasks = [
   {
@@ -23,17 +22,40 @@ const tasks = [
   }
 ]
 
+const getAverage = (marks) => {
+  let sum = 0;
+  marks.forEach(mark => {
+    sum += mark;
+  });
+  if (marks.length === 0) return 0;
+  const avg = sum / marks.length;
+  return parseInt(avg);
+}
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, quizzes, marks, setQuizzes, user } = useAuthContext();
   const navigate = useNavigate();
+
+  const { fetchQuizzes } = useGetQuizzes();
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
     }
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const getQuizzes = async () => {
+      const token = await user?.getIdToken();
+      const data = await fetchQuizzes(token);
+      setQuizzes(data);
+    }
+    getQuizzes();
+  }, [user])
   
   return (
 
@@ -71,13 +93,6 @@ const Dashboard = () => {
           >
             <Box>
               <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Quizzes
-              </Typography>
-              <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
@@ -86,7 +101,29 @@ const Dashboard = () => {
               </Typography>
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
+          <Box height="250px" overflow={'auto'}>
+          {quizzes?.map((quiz, i) => (
+            <Box
+              key={i}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              borderBottom={`4px solid ${colors.primary[500]}`}
+              p="15px"
+              ml='25px'
+              mr={'25px'}
+            >
+              <Box color={colors.grey[100]}>{quiz.name}</Box>
+              <Box
+                backgroundColor={colors.greenAccent[500]}
+                p="5px 10px"
+                borderRadius="4px"
+                fontSize={'18px'}
+              >
+                {marks[i] || 'N/A'}
+              </Box>
+            </Box>
+          ))}
           </Box>
         </Box>
         <Box
@@ -113,13 +150,13 @@ const Dashboard = () => {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
+            <ProgressCircle size="125" progress={getAverage(marks)/100} />
             <Typography
               variant="h5"
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              Your Current Average Score is <strong>80%</strong>
+              Your Current Average Score is <strong>{getAverage(marks)} %</strong>
             </Typography>
           </Box>
         </Box>
@@ -150,7 +187,7 @@ const Dashboard = () => {
             </Typography>
           </Box>
           <Box height="250px" mt={'20px'}>
-          {tasks.map((task, i) => (
+          {tasks?.map((task, i) => (
             <Box
               key={i}
               display="flex"
