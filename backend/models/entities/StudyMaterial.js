@@ -10,7 +10,7 @@ StudyMaterial.init({
     primaryKey: true
   },
   user_id: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING(255),
     allowNull: false,
     references: {
       model: 'Users',

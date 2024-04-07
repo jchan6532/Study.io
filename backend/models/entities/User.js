@@ -23,6 +23,13 @@ class User extends Model {
     return user;
   }
 
+  static async createUserFromProvider(data) {
+    const { email, first_name, last_name, user_name, id } = data
+    if (!email || !first_name || !user_name || !id) throw Error('All fields must be filled in');
+    const user = await this.create({email, first_name, last_name, user_name, id});
+    return user;
+  }
+
   static async validateUser(data) {
     const { email, password } = data;
     if (!email || !password) throw Error('All fields must be filled in');
@@ -39,7 +46,7 @@ class User extends Model {
 
 User.init({
   id: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING(255),
     defaultValue: UUIDV4,
     primaryKey: true
   },
@@ -50,7 +57,7 @@ User.init({
   },
   password: {
     type: DataTypes.STRING(255),
-    allowNull: false
+    allowNull: true
   },
   first_name: {
     type: DataTypes.STRING(255),
