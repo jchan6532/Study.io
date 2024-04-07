@@ -23,7 +23,9 @@ export const AuthContextProvider = ({children}) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if(!currentUser) return;
-      await signinProvider();
+      console.log(currentUser);
+      const token = await currentUser.getIdToken();
+      await signinProvider(token);
       setUser(currentUser);
     });
     setLoading(false);

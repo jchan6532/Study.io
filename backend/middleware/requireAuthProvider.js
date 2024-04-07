@@ -16,7 +16,6 @@ const requireAuthProvider = async (req, res, next) => {
       const url = `${firebaseUrl}/v1/accounts:lookup?key=${apiKey}`;
       const data = { idToken: firebaseToken };
       const response = await axios.post(url, data);
-
       if (response.status === 200) {
         const userData = response.data.users[0];
         const names = userData.displayName.split(' ');
@@ -29,7 +28,6 @@ const requireAuthProvider = async (req, res, next) => {
           last_name: lastName,
           user_name: userData.displayName
         };      
-        console.log(req.userData);
         setToken(userData.localId, firebaseToken);
       } else {
         return res.status(401).json({ message: 'Token is invalid or expired' });
@@ -39,7 +37,7 @@ const requireAuthProvider = async (req, res, next) => {
       return res.status(401).json({ message: 'Failure querying Firebase' });
     }
   } else {
-    req.user_id = userIdFromToken;
+    req.userData = {id: userIdFromToken};
   }
 
   next();

@@ -29,7 +29,6 @@ const signup = async (req, res) => {
 
 const signinWithProvider = async (req, res) => {
     const { userData } = req;
-    console.log(userData);
     try {
         if (!userData.id) throw Error('user ID is not specified');
         let user = await User.findByPk(userData.id);
