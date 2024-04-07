@@ -1,14 +1,34 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signInWithRedirect, 
+  signOut, 
+  onAuthStateChanged 
+} from "@firebase/auth";
+import { auth } from "../services/firebase";
+import useSigninProvider from "../hooks/useSiginProvider";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 export const AuthContextProvider = ({children}) => {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true); 
+  const [user, setUser] = useState({});
+  const {signinProvider} = useSigninProvider();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn');
     if (loggedIn) setIsLoggedIn(JSON.parse(loggedIn));
+
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if(!currentUser) return;
+      await signinProvider();
+      setUser(currentUser);
+    });
+    setLoading(false);
+
+    return () => unsubscribe();
   }, []);
 
   const login = () => {
@@ -19,11 +39,21 @@ export const AuthContextProvider = ({children}) => {
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
     setIsLoggedIn(false);
   }
+  
+  const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  }
 
-  console.log(isLoggedIn);
+  const googleSignOut = async () => {
+    signOut(auth);
+    setUser(null);
+  }
+
+  if(loading) return null;
   
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, login, logout, googleSignIn, googleSignOut, user }}>
       {children}
     </AuthContext.Provider>
   );
