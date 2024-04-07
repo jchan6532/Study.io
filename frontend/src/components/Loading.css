@@ -1,0 +1,7 @@
+.loading-text {
+  font-weight: bold;
+  display: inline-block;
+  font-family: monospace;
+  font-size: 30px;
+  animation: l 1s steps(4) infinite;
+}
