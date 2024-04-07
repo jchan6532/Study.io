@@ -41,6 +41,7 @@ const UploadFileDialog = () => {
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    event.target.value = '';
   };
 
   const handleClickOpen = () => {
