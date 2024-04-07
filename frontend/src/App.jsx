@@ -19,15 +19,17 @@ import Toast from "./components/Toast.jsx";
 import { useEffect, useState } from "react";
 import { useSocketContext } from "./contexts/SocketContext.jsx";
 import useGetQuizzes from "./hooks/useGetQuizzes.js";
+import useGetConcepts from "./hooks/useGetConcepts.js";
 
 
 function App() {
   const [theme, colorMode] = useMode();
-  const { isLoggedIn, user, setQuizzes } = useAuthContext();
+  const { isLoggedIn, user, setQuizzes, setConcepts } = useAuthContext();
   const [notifcation, setNotification] = useState(false);
   const [message, setMessage] = useState('');
   const {socket} = useSocketContext();
   const {fetchQuizzes} = useGetQuizzes();
+  const {fetchConcepts} = useGetConcepts();
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -43,6 +45,12 @@ function App() {
           setQuizzes(data);
         }
         getQuizzes();
+
+        const getConcepts = async () => {
+          const data = await fetchConcepts(user.uid);
+          setConcepts(data);
+        }
+        getConcepts();
       });
 
       return () => {

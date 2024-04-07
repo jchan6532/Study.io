@@ -8,14 +8,15 @@ import useGetQuizzes from '../../hooks/useGetQuizzes';
 import Toast from "../../components/Toast";
 
 const Quizzes = () => {
-  const { user } = useAuthContext();
-  const [quizzes, setQuizzes] = useState([]);
+  const { user, quizzes, setQuizzes } = useAuthContext();
   const { fetchQuizzes } = useGetQuizzes();
   const [openToast, setOpenToast] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('');
 
   useEffect(() => {
+    if (!user) return;
+    
     const getQuizzes = async () => {
       const token = await user?.getIdToken();
       const data = await fetchQuizzes(token);

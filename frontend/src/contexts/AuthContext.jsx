@@ -17,6 +17,7 @@ export const AuthContextProvider = ({children}) => {
   const [user, setUser] = useState(null);
   const [quizzes, setQuizzes] = useState(null);
   const [marks, setMarks] = useState([]);
+  const [concepts, setConcepts] = useState([]);
   const {signinProvider} = useSigninProvider();
 
   useEffect(() => {
@@ -83,7 +84,9 @@ export const AuthContextProvider = ({children}) => {
       quizzes, 
       setQuizzes,
       marks,
-      setMarks
+      setMarks,
+      concepts,
+      setConcepts
     }}
     >
       {children}

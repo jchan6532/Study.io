@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Toolbar, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import ProgressCircle from '../../components/ProgressCircle';
@@ -6,21 +6,8 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import useGetQuizzes from "../../hooks/useGetQuizzes";
-
-const tasks = [
-  {
-    name: 'your mom',
-    priority: 5
-  },
-  {
-    name: 'math',
-    priority: 5
-  },
-  {
-    name: 'C#',
-    priority: 5
-  }
-]
+import useGetConcepts from "../../hooks/useGetConcepts";
+import moment from "moment";
 
 const getAverage = (marks) => {
   let sum = 0;
@@ -32,13 +19,49 @@ const getAverage = (marks) => {
   return parseInt(avg);
 }
 
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  if (minutes < 10 && remainingSeconds < 10) return `0${minutes} : 0${remainingSeconds}`;
+  if (remainingSeconds < 10) return `${minutes} : 0${remainingSeconds}`;
+  if (minutes < 10) return `0${minutes} : ${remainingSeconds}`;
+  return `${minutes} : ${remainingSeconds}`;
+};
+
+const pomodoroMax = 600;
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { isLoggedIn, quizzes, marks, setQuizzes, user } = useAuthContext();
+  const { 
+    isLoggedIn, 
+    quizzes, 
+    marks, 
+    setQuizzes, 
+    user, 
+    setConcepts, 
+    concepts
+  } = useAuthContext();
   const navigate = useNavigate();
 
   const { fetchQuizzes } = useGetQuizzes();
+  const { fetchConcepts } = useGetConcepts();
+
+  const [seconds, setSeconds] = useState(pomodoroMax);
+  useEffect(() => {
+
+    const intervalId = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds <= 1) {
+          clearInterval(intervalId);
+          return 0;
+        } else {
+          return prevSeconds - 1;
+        }
+      });
+    }, 1000);
+    return () => clearInterval(intervalId);
+ }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -48,13 +71,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!user) return;
-
     const getQuizzes = async () => {
       const token = await user?.getIdToken();
       const data = await fetchQuizzes(token);
       setQuizzes(data);
     }
     getQuizzes();
+
+    const getConcepts = async () => {
+      const data = await fetchConcepts(user.uid);
+      setConcepts(data);
+    }
+    getConcepts();
   }, [user])
   
   return (
@@ -97,41 +125,52 @@ const Dashboard = () => {
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                Current Quizzes:
+                Current Quizzes
               </Typography>
             </Box>
           </Box>
           <Box height="250px" overflow={'auto'}>
-          {quizzes?.map((quiz, i) => (
-            <Box
-              key={i}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
-              ml='25px'
-              mr={'25px'}
-            >
-              <Box color={colors.grey[100]}>{quiz.name}</Box>
+            {quizzes?.map((quiz, i) => (
               <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
-                fontSize={'18px'}
+                key={i}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                borderBottom={`4px solid ${colors.primary[500]}`}
+                p="15px"
+                ml='25px'
+                mr={'25px'}
               >
-                {marks[i] || 'N/A'}
+                <Box color={colors.grey[100]}>{quiz.name}</Box>
+                <Box
+                  backgroundColor={colors.greenAccent[500]}
+                  p="5px 10px"
+                  borderRadius="4px"
+                  fontSize={'18px'}
+                >
+                  {marks[i] || 'N/A'}
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))}
           </Box>
         </Box>
         <Box
           gridColumn="span 4"
           gridRow="span 4"
           backgroundColor={colors.primary[400]}
-          overflow="auto"
+          p="30px"
         >
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            color={colors.greenAccent[500]}
+          >
+            Pomodoro Timer
+          </Typography>
+          <Toolbar />
+          <Typography variant="h1" fontWeight="600" fontSize={'100px'}>
+            {formatTime(seconds)}
+          </Typography>
         </Box>
 
         {/* ROW 3 */}
@@ -176,18 +215,18 @@ const Dashboard = () => {
               fontWeight="600"
               sx={{ padding: "30px 30px 0 30px" }}
             >
-              Tasks/To-do
+              Concepts Learned
             </Typography>
             <Typography
               variant="h5"
               fontWeight="600"
-              sx={{ padding: "30px 30px 0 30px" }}
+              sx={{ padding: "30px 50px 0 30px" }}
             >
-              Priority
+              Time
             </Typography>
           </Box>
-          <Box height="250px" mt={'20px'}>
-          {tasks?.map((task, i) => (
+          <Box height="250px" mt={'20px'} marginBottom={'60px'}>
+          {concepts?.map((conceptObj, i) => (
             <Box
               key={i}
               display="flex"
@@ -197,18 +236,20 @@ const Dashboard = () => {
               p="15px"
               ml='25px'
               mr={'25px'}
+              mb={'10px'}
             >
-              <Box color={colors.grey[100]}>{task.name}</Box>
+              <Box color={colors.grey[100]} fontSize={'18px'}>{conceptObj.concept}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
                 fontSize={'18px'}
               >
-                {task.priority}
+                {moment(conceptObj.updatedAt).fromNow()}
               </Box>
             </Box>
           ))}
+          <Toolbar />
           </Box>
         </Box>
       </Box>
