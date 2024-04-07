@@ -5,8 +5,12 @@ const models = require('./models');
 const authRoutes = require('./routes/AuthRouter');
 const userRoutes = require('./routes/UserRouter');
 const studyMaterialRoutes = require('./routes/StudyMaterialRouter');
+const socketIo = require('./services/socket');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app);
+socketIo.init(server);
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -22,11 +26,10 @@ app.use('/study-materials', studyMaterialRoutes);
 
 sequelize.sync({ force: true, alter: true })
     .then(() => {
-        sequelize.authenticate();
         console.log('Database is synced');
 
         // Start the server
-        app.listen(port, () => {
+        server.listen(port, () => {
             console.log('Server running on port', port);              
         });
     })
