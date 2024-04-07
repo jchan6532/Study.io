@@ -8,7 +8,7 @@ function SlideTransition(props) {
   return <Slide {...props} direction="up" />;
 }
 
-const Toast = ({open, setOpen, message}) => {
+const Toast = ({open, setOpen, message, severity}) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -31,7 +31,7 @@ const Toast = ({open, setOpen, message}) => {
       >
         <Alert
           onClose={handleClose}
-          severity="success"
+          severity={severity}
           variant="filled"
           sx={{ 
             width: '100%',
