@@ -14,7 +14,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true); 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const {signinProvider} = useSigninProvider();
 
   useEffect(() => {
@@ -22,22 +22,40 @@ export const AuthContextProvider = ({children}) => {
     if (loggedIn) setIsLoggedIn(JSON.parse(loggedIn));
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if(!currentUser) return;
-      await signinProvider();
-      setUser(currentUser);
+      if(!currentUser) {
+        localStorage.setItem('isLoggedIn', JSON.stringify(false));
+        setIsLoggedIn(false);
+        return;
+      };
+
+      const token = await currentUser.getIdToken();
+      try {
+        const response = await signinProvider(token);
+        if(response.hasOwnProperty('error')) setUser(null);
+        else setUser(currentUser);
+
+        localStorage.setItem('isLoggedIn', JSON.stringify(true));
+        setIsLoggedIn(true);
+      } catch (error) {
+        setUser(null);
+        localStorage.setItem('isLoggedIn', JSON.stringify(false));
+        setIsLoggedIn(false);
+      }
     });
     setLoading(false);
 
     return () => unsubscribe();
   }, []);
 
-  const login = () => {
+  const login = (user) => {
     localStorage.setItem('isLoggedIn', JSON.stringify(true));
     setIsLoggedIn(true);
+    setUser(user);
   }
   const logout = () => {
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
     setIsLoggedIn(false);
+    setUser(null);
   }
   
   const googleSignIn = async () => {

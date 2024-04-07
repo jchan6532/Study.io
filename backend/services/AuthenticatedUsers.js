@@ -12,4 +12,4 @@ const deleteToken = (userId) => {
 
 const findUserIdByToken = (token) => Object.keys(authenticatedUsers).find(key => authenticatedUsers[key] === token);
 
-module.exports = { getToken, setToken, deleteToken, findUserIdByToken };
+module.exports = { getToken, setToken, deleteToken, findUserIdByToken, authenticatedUsers };

@@ -59,6 +59,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user } = useAuthContext();
 
   useEffect(() => {
     if(isLoggedIn)  {
@@ -74,25 +75,29 @@ const Login = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
   const handleRememberMeChanged = (event) => {
     setRememberMe(event.target.checked);
   };
   
-  const handleSubmit = (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
 
     if (rememberMe) localStorage.setItem('loginData', JSON.stringify({ email, password, rememberMe }));
     else localStorage.removeItem('loginData');
 
-    login();
-    navigate('/');
+    const user = {email,password};
+    login(user);
   };
 
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      login();
-      navigate('/');
     } catch (error) {
       console.error(error);
     }
@@ -129,7 +134,7 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, pl: 5, pr: 5 }}>
+          <Box component="form" onSubmit={handleLogin} sx={{ mt: 1, pl: 5, pr: 5 }}>
             <TextField
               margin="normal"
               required

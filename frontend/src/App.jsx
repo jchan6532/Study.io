@@ -14,16 +14,33 @@ import Calendar from "./scenes/calendar";
 import Login from "./scenes/login/index.jsx";
 import { useAuthContext } from "./contexts/AuthContext.jsx";
 import UploadFileDialog from "./modals/UploadFileDialog.jsx";
-
-import Notification from "./components/Notification.jsx";
 import Toast from "./components/Toast.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSocketContext } from "./contexts/SocketContext.jsx";
 
 
 function App() {
   const [theme, colorMode] = useMode();
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, user } = useAuthContext();
   const [notifcation, setNotification] = useState(false);
+  const [message, setMessage] = useState('');
+  const {socket} = useSocketContext();
+
+  useEffect(() => {
+    console.log(isLoggedIn, socket);
+    //if (!isLoggedIn) return;
+    if (socket) {
+      socket.on(`upload`, (data) => {
+        console.log(data);
+        setMessage(data.message);
+        setNotification(true);
+      });
+
+      return () => {
+        socket.off(`${user?.uid}`);
+      };
+    }
+  }, [socket, user])
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -46,8 +63,7 @@ function App() {
             </Routes>
 
             {isLoggedIn && <UploadFileDialog />}
-
-            <Toast />
+            {notifcation && <Toast open={notifcation} setOpen={setNotification} message={message} severity={'success'} />}
           </main>
         </div>
       </ThemeProvider>

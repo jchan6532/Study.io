@@ -5,8 +5,8 @@ const { v4: uuidv4 } = require('uuid');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        const { userid } = req.params;
-        const uploadPath = path.join(__dirname, '..', 'uploads', 'study-materials', userid);
+        const {id} = req.userData;
+        const uploadPath = path.join(__dirname, '..', 'uploads', 'study-materials', id);
 
         // Check if directory exists, create it if it doesn't
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
