@@ -8,7 +8,7 @@ const studyMaterialRoutes = require('./routes/StudyMaterialRouter');
 
 const app = express();
 require('dotenv').config();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -20,7 +20,7 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/study-materials', studyMaterialRoutes);
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true, alter: true })
     .then(() => {
         sequelize.authenticate();
         console.log('Database is synced');
