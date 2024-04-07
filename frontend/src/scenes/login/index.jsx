@@ -53,17 +53,16 @@ const ModeToggle = (toggle) => {
 
 const Login = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const navigate = useNavigate();
-  const { login, isLoggedIn, logout } = useAuthContext();
+  const { login, isLoggedIn, logout, googleSignIn } = useAuthContext();
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     if(isLoggedIn)  {
-      navigate('/');
+      logout();
     }
 
     const savedLoginData = localStorage.getItem('loginData');
@@ -88,9 +87,19 @@ const Login = () => {
     login();
     navigate('/');
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+      login();
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
   return (
-    <Grid container component="main" sx={{ height: '100vh' }} backgroundColor={colors.primary[400]} >
+    <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
         item
         xs={false}
@@ -99,7 +108,6 @@ const Login = () => {
         sx={{
           backgroundImage: 'url(../../assets/studyio-logo.jpg)',
           backgroundRepeat: 'no-repeat',
-          backgroundColor: `${theme.palette.mode === 'dark' ? colors.grey[500] : colors.grey[900]}`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -112,7 +120,7 @@ const Login = () => {
             mx: 4,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -164,8 +172,14 @@ const Login = () => {
                 variant="contained"
                 className="button-style"
                 startIcon={<img height="28" alt="Google logo" src="/assets/google-logo.svg" />}
+                onClick={handleGoogleSignIn}
               >
-                <Typography variant="button" color="text.secondary" noWrap align='center'>
+                <Typography 
+                  variant="button" 
+                  color={theme.palette.mode === 'dark' ? "text.secondary" : '#ffffff'} 
+                  noWrap 
+                  align='center'
+                >
                   Sign in with Google
                 </Typography>
               </Button>

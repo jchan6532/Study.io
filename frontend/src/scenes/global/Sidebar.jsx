@@ -17,6 +17,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 const SideBarItemTitles = {
   '/': 'Dashboard',
@@ -57,6 +58,7 @@ const Sidebar = () => {
   const currentPath = location.pathname;
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState(SideBarItemTitles[currentPath]);
+  const { user } = useAuthContext();
   return (
     <Box
       sx={{
@@ -112,7 +114,7 @@ const Sidebar = () => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/user.png`}
+                  src={user ? user.photoURL : `../../assets/user.png`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -123,7 +125,7 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Justin Chan
+                  {user?.displayName}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Study.io

@@ -18,12 +18,13 @@ const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
-    const { logout, isLoggedIn } = useAuthContext();
+    const { logout, isLoggedIn, googleSignOut } = useAuthContext();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
       if(isLoggedIn){
         logout();
+        await googleSignOut();
         navigate('/login');
       }
     }
