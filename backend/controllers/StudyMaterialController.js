@@ -4,6 +4,7 @@ const StudyMaterial = require('../models/entities/StudyMaterial');
 const Quiz = require('../models/entities/Quiz');
 const QuizQuestion = require('../models/entities/QuizQuestion');
 const MCQ = require('../models/entities/MCQ');
+const Concepts = require('../models/entities/Concepts')
 const { getIO } = require('../services/socket');
 const { generateQuiz } = require('../../LLM/generateQuiz');
 
@@ -31,6 +32,14 @@ const storeQuizToDb = async (quizJson, userId, quizName) => {
       isMCQ: true,
       mcq_id: newMCQ.id,
       answered_right: false
+    });
+  }
+
+  for (const new_concept of quizData.concepts) {
+    
+    const addConcepts = await Concepts.create({
+      concept: new_concept,
+      quiz_id: newQuiz.id
     });
   }
 }
