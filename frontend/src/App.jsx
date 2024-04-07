@@ -8,6 +8,7 @@ import Team from "./scenes/team/index.jsx";
 import Invoices from "./scenes/invoices/index.jsx";
 import Contacts from "./scenes/contacts/index.jsx";
 import Form from "./scenes/form";
+import Quizzes from "./scenes/quizzes/index.jsx";
 // import Line from "./scenes/line";
 // import FAQ from "./scenes/faq";
 import Calendar from "./scenes/calendar";
@@ -30,7 +31,7 @@ function App() {
     console.log(isLoggedIn, socket);
     //if (!isLoggedIn) return;
     if (socket) {
-      socket.on(`upload`, (data) => {
+      socket.on(`${user?.uid}`, (data) => {
         console.log(data);
         setMessage(data.message);
         setNotification(true);
@@ -60,6 +61,7 @@ function App() {
               {/* <Route path="/faq" element={<FAQ />} /> */}
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/quizzes" element={<Quizzes />} />
             </Routes>
 
             {isLoggedIn && <UploadFileDialog />}

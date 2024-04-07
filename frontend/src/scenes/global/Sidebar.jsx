@@ -30,7 +30,7 @@ const SideBarItemTitles = {
   '/bar': 'Bar Chart',
   '/pie': 'Pie Chart',
   '/line': 'Line Chart',
-  '/geography': 'Geography Chart'  
+  '/quizzes': 'Quizzes'
 }
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -230,8 +230,8 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title={SideBarItemTitles['/geography']}
-              to="/geography"
+              title={SideBarItemTitles['/quizzes']}
+              to="/quizzes"
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

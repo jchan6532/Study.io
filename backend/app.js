@@ -5,6 +5,7 @@ const models = require('./models');
 const authRoutes = require('./routes/AuthRouter');
 const userRoutes = require('./routes/UserRouter');
 const studyMaterialRoutes = require('./routes/StudyMaterialRouter');
+const quizRoutes = require('./routes/Quizrouter');
 const socketIo = require('./services/socket');
 const http = require('http');
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/study-materials', studyMaterialRoutes);
+app.use('/quiz', quizRoutes);
 
 sequelize.sync({ force: true, alter: true })
     .then(() => {

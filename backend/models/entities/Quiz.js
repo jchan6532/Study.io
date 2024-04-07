@@ -9,6 +9,10 @@ Quiz.init({
     defaultValue: UUIDV4,
     primaryKey: true
   },
+  name: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
   user_id: {
     type: DataTypes.STRING(255),
     allowNull: false,
