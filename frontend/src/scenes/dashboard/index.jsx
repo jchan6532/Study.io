@@ -225,7 +225,7 @@ const Dashboard = () => {
               Time
             </Typography>
           </Box>
-          <Box height="250px" mt={'20px'} marginBottom={'60px'}>
+          <Box height="250px" mt={'20px'} marginBottom={'100px'}>
           {concepts?.map((conceptObj, i) => (
             <Box
               key={i}
@@ -236,7 +236,6 @@ const Dashboard = () => {
               p="15px"
               ml='25px'
               mr={'25px'}
-              mb={'10px'}
             >
               <Box color={colors.grey[100]} fontSize={'18px'}>{conceptObj.concept}</Box>
               <Box
