@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const { isLoggedIn } = useAuthContext();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
     }
-  }, []);
+  }, [isLoggedIn, navigate]);
   
   return (
     <Box margin="20px">
