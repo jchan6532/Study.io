@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { 
@@ -19,19 +19,15 @@ import {
 import CloudUpload from '@mui/icons-material/CloudUpload';
 import './UploadFileDialog.css';
 import { useTheme } from '@emotion/react';
-import useUploadFile from '../hooks/useUploadFile';
-import Loading from '../components/Loading';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const UploadFileDialog = () => {
+const NotificationModal = () => {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const { uploadFile } = useUploadFile();
-  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -46,19 +42,9 @@ const UploadFileDialog = () => {
     setSelectedFile(null);
   };
 
-  const handleSubmit = async () => {
-    setOpen(false);
-    setLoading(true);
+  const handleSubmit = () => {
     console.log(selectedFile);
-    try {
-      await uploadFile(); 
-    } catch (error) {
-      
-    }
-    finally{
-      //setLoading(false);
-      setSelectedFile(null);
-    }
+    setOpen(false);
   }
 
   return (
@@ -66,8 +52,8 @@ const UploadFileDialog = () => {
       <Box
         sx={{
           position: 'fixed',
-          bottom: 80, 
-          right: 80,
+          top: 80, 
+          left: 80,
         }}
       >
         <Fab color="default" aria-label="add" size="small" onClick={handleClickOpen}>
@@ -93,7 +79,7 @@ const UploadFileDialog = () => {
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle>Upload Study Notes</DialogTitle>
+        <DialogTitle>Notification</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <Typography variant='h4'>Please Choose a file to upload as your study notes:</Typography>
@@ -134,18 +120,6 @@ const UploadFileDialog = () => {
         </DialogContent>
         <DialogActions>
           <Button 
-            onClick={handleClose}
-            sx={{
-              borderRadius: 10,
-              color: `${theme.palette.mode === 'dark' ? "text.secondary" : 'primary.dark'}`,
-              '&:hover': {
-                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button 
             onClick={handleSubmit} 
             sx={{
               borderRadius: 10,
@@ -157,11 +131,22 @@ const UploadFileDialog = () => {
           >
             Submit
           </Button>
+          <Button 
+            onClick={handleClose}
+            sx={{
+              borderRadius: 10,
+              color: `${theme.palette.mode === 'dark' ? "text.secondary" : 'primary.dark'}`,
+              '&:hover': {
+                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`
+              },
+            }}
+          >
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
-      {loading && <Loading open={loading} />}
     </>
   );
 }
 
-export default UploadFileDialog;
+export default NotificationModal;
