@@ -6,6 +6,7 @@ const QuizAnswer = require('./entities/QuizAnswer');
 const MCQ = require('./entities/MCQ');
 const QuizQuestion = require('./entities/QuizQuestion');
 const Mark = require('./entities/Mark');
+const Concepts = require('./entities/Concepts')
 
 // Define associations
 User.hasMany(StudyMaterial, { foreignKey: 'user_id' });
@@ -26,6 +27,9 @@ QuizQuestion.belongsTo(QuizAnswer, { foreignKey: 'answer_id' });
 Quiz.hasMany(Mark, { foreignKey: 'quiz_id' });
 Mark.belongsTo(Quiz, { foreignKey: 'quiz_id' });
 
+Quiz.hasMany(Concepts, { foreignKey: 'quiz_id' });
+Concepts.belongsTo(Quiz, { foreignKey: 'quiz_id'});
+
 // Export models and Sequelize for use in the application
 module.exports = {
   User,
@@ -34,5 +38,6 @@ module.exports = {
   QuizAnswer,
   MCQ,
   QuizQuestion,
-  Mark
+  Mark,
+  Concepts
 };

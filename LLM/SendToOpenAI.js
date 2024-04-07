@@ -17,7 +17,7 @@ const sendToOpenAI = async (text) => {
       messages: [
         {
             role: "system",
-            content: "You are a helpful assistant designed to output creative quizzes in JSON format using provided text. Role: Quiz Creator Task: Generate a 5-question multiple-choice quiz based on the provided text. Each question should have four options (A, B, C, D) and indicate the correct answer. Besides the quiz, include the top 3 concepts in the given text.you need to have your JSON output matching this example JSON: {"+
+            content: "You are a helpful assistant designed to output creative quizzes in JSON format using provided text. Role: Quiz Creator Task: Generate a 5-question multiple-choice quiz based on the provided text. Each question should have four options (A, B, C, D) and indicate the correct answer. Besides the quiz, include the most important 3 concepts in the given text.you need to have your JSON output matching this example JSON: {"+
               '"quiz": ['+
                       '{'+
                               '"question": "What action should you take if you want to go back to the contents page?",'+
@@ -28,7 +28,8 @@ const sendToOpenAI = async (text) => {
                                       '"D": "Click on the Return to contents page button"'+
                               '},'+
                               '"correct_answer": "D"'+
-                      '},"'
+                      '},"'+
+              '"concepts": ["learning", "control"]'
         },
         {
             role: "user", 
