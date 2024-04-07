@@ -21,6 +21,8 @@ import './UploadFileDialog.css';
 import { useTheme } from '@emotion/react';
 import useUploadFile from '../hooks/useUploadFile';
 import Loading from '../components/Loading';
+import { useAuthContext } from '../contexts/AuthContext';
+import Toast from '../components/Toast';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,6 +34,10 @@ const UploadFileDialog = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const { uploadFile } = useUploadFile();
   const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext();
+  const [openToast, setOpenToast] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('');
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -49,15 +55,19 @@ const UploadFileDialog = () => {
   const handleSubmit = async () => {
     setOpen(false);
     setLoading(true);
-    console.log(selectedFile);
+    const token = await user?.getIdToken();
     try {
-      await uploadFile(); 
+      await uploadFile(selectedFile, selectedFile?.name, token);
+      setMessage('Your File was Uploaded Successfully');
+      setSeverity('success');
     } catch (error) {
-      
+      setMessage(error.message);
+      setSeverity('error');
     }
     finally{
-      //setLoading(false);
+      setLoading(false);
       setSelectedFile(null);
+      setOpenToast(true);
     }
   }
 
@@ -160,6 +170,7 @@ const UploadFileDialog = () => {
         </DialogActions>
       </Dialog>
       {loading && <Loading open={loading} />}
+      <Toast open={openToast} setOpen={setOpenToast} message={message} severity={severity}/>
     </>
   );
 }
