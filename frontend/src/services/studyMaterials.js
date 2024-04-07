@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const studyMaterialsApi = axios.create({
-  baseURL: 'https://study-io-backend.vercel.app/study-materials'
+  baseURL: 'http://localhost:5000/study-materials'
 });

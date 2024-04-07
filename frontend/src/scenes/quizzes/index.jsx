@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from 'axios';
 import { useAuthContext } from "../../contexts/AuthContext";
 import { Box } from "@mui/system";
 import Header from "../../components/Header";
@@ -16,7 +15,7 @@ const Quizzes = () => {
 
   useEffect(() => {
     if (!user) return;
-    
+
     const getQuizzes = async () => {
       const token = await user?.getIdToken();
       const data = await fetchQuizzes(token);
