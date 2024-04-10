@@ -30,16 +30,18 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/study-materials', studyMaterialRoutes);
 app.use('/quiz', quizRoutes);
+server.listen(port, () => {
+  console.log('Server running on port', port);              
+});
+// sequelize.sync({ force: true, alter: true })
+//     .then(() => {
+//         console.log('Database is synced');
 
-sequelize.sync({ force: true, alter: true })
-    .then(() => {
-        console.log('Database is synced');
-
-        // Start the server
-        server.listen(port, () => {
-            console.log('Server running on port', port);              
-        });
-    })
-    .catch((error) => {
-        console.error('Unable to sync database:', error);
-    });
+//         // Start the server
+//         server.listen(port, () => {
+//             console.log('Server running on port', port);              
+//         });
+//     })
+//     .catch((error) => {
+//         console.error('Unable to sync database:', error);
+//     });
