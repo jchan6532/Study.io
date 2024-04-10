@@ -3,7 +3,7 @@ import axios from 'axios';
 const useGetConcepts = () => {
   const fetchConcepts = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/users/${id}/concepts`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/users/${id}/concepts`);
       console.log(response.data);
       return response.data.concepts;
     } catch (error) {

@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const authApi = axios.create({
-  baseURL: 'https://study-io-omzo.vercel.app/auth'
+  baseURL: `${process.env.REACT_APP_BACKEND_URL}/auth`
 });

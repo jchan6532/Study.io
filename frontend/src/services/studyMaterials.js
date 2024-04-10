@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const studyMaterialsApi = axios.create({
-  baseURL: 'http://localhost:5000/study-materials'
+  baseURL: `${process.env.REACT_APP_BACKEND_URL}/study-materials`
 });
