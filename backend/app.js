@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const sequelize = require('./models/database');
 const cors = require('cors');
 const models = require('./models');
@@ -12,7 +13,6 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 socketIo.init(server);
-require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 // Middleware
