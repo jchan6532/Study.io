@@ -1,5 +1,4 @@
-//require('dotenv').config();
-const { parsePDF } = require('../backend/services/PDFParser'); 
+const { parsePDF } = require('./PDFParser'); 
 const { sendToOpenAI } = require('./SendToOpenAI'); 
 
 const generateQuiz = async (testFilePath) => {

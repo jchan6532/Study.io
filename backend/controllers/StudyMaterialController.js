@@ -6,7 +6,7 @@ const QuizQuestion = require('../models/entities/QuizQuestion');
 const MCQ = require('../models/entities/MCQ');
 const Concepts = require('../models/entities/Concepts')
 const { getIO } = require('../services/socket');
-const { generateQuiz } = require('../../LLM/generateQuiz');
+const { generateQuiz } = require('../services/generateQuiz');
 
 const storeQuizToDb = async (quizJson, userId, quizName) => {
   const quizData = JSON.parse(quizJson);
