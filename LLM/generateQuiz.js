@@ -1,4 +1,4 @@
-require('dotenv').config();
+//require('dotenv').config();
 const { parsePDF } = require('../backend/services/PDFParser'); 
 const { sendToOpenAI } = require('./SendToOpenAI'); 
 
