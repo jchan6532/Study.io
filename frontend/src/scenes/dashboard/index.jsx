@@ -111,6 +111,7 @@ const Dashboard = () => {
           gridColumn="span 8"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
+          borderRadius={10}
         >
           <Box
             mt="25px"
@@ -159,6 +160,7 @@ const Dashboard = () => {
           gridRow="span 4"
           backgroundColor={colors.primary[400]}
           p="30px"
+          borderRadius={10}
         >
           <Typography
             variant="h3"
@@ -179,6 +181,7 @@ const Dashboard = () => {
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           p="30px"
+          borderRadius={10}
         >
           <Typography variant="h5" fontWeight="600">
             Statistics
@@ -204,6 +207,7 @@ const Dashboard = () => {
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow={'auto'}
+          borderRadius={10}
         >
           <Box
             display={'flex'}
