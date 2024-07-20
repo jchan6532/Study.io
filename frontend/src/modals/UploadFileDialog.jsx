@@ -1,31 +1,31 @@
 import React, { forwardRef, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { 
-  Fab, 
-  Button, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle, 
+import {
+  Fab,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Slide,
   Box,
   IconButton,
   Input,
   Typography,
-  Toolbar
+  Toolbar,
 } from '@mui/material';
 import CloudUpload from '@mui/icons-material/CloudUpload';
 import './UploadFileDialog.css';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material';
 import useUploadFile from '../hooks/useUploadFile';
 import Loading from '../components/Loading';
 import { useAuthContext } from '../contexts/AuthContext';
 import Toast from '../components/Toast';
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction='up' ref={ref} {...props} />;
 });
 
 const UploadFileDialog = () => {
@@ -64,24 +64,28 @@ const UploadFileDialog = () => {
     } catch (error) {
       setMessage(error.message);
       setSeverity('error');
-    }
-    finally{
+    } finally {
       setLoading(false);
       setSelectedFile(null);
       setOpenToast(true);
     }
-  }
+  };
 
   return (
     <>
       <Box
         sx={{
           position: 'fixed',
-          bottom: 80, 
+          bottom: 80,
           right: 80,
         }}
       >
-        <Fab color="default" aria-label="add" size="small" onClick={handleClickOpen}>
+        <Fab
+          color='default'
+          aria-label='add'
+          size='small'
+          onClick={handleClickOpen}
+        >
           <AddIcon />
         </Fab>
       </Box>
@@ -90,53 +94,55 @@ const UploadFileDialog = () => {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        maxWidth="sm"
+        aria-describedby='alert-dialog-slide-description'
+        maxWidth='sm'
         fullWidth
       >
-        <IconButton 
-          onClick={handleClose} 
+        <IconButton
+          onClick={handleClose}
           sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8
+            position: 'absolute',
+            top: 8,
+            right: 8,
           }}
         >
           <CloseIcon />
         </IconButton>
         <DialogTitle>Upload Study Notes</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            <Typography variant='h4'>Please Choose a file to upload as your study notes:</Typography>
+          <DialogContentText id='alert-dialog-slide-description'>
+            <Typography variant='h4'>
+              Please Choose a file to upload as your study notes:
+            </Typography>
           </DialogContentText>
           <Toolbar />
-          <div className="upload-video-box">
-            <CloudUpload fontSize="large" />
-            <Typography variant="h6">
+          <div className='upload-video-box'>
+            <CloudUpload fontSize='large' />
+            <Typography variant='h6'>
               Choose a file or drag & drop it here
             </Typography>
             <div>
               <Button
-                variant="outlined"
-                component="label"
+                variant='outlined'
+                component='label'
                 color={theme.palette.mode === 'dark' ? 'secondary' : 'primary'}
-                sx={{ 
+                sx={{
                   borderRadius: '0.5rem',
-                  padding: '1vh 2vw'
+                  padding: '1vh 2vw',
                 }}
               >
                 <input
                   hidden
-                  type="file"
-                  id="file"
-                  accept=".pdf"
+                  type='file'
+                  id='file'
+                  accept='.pdf'
                   onChange={handleFileChange}
                 />
                 Upload
               </Button>
             </div>
-            <Typography 
-              variant="body1" 
+            <Typography
+              variant='body1'
               color={theme.palette.mode === 'dark' ? 'neutral' : 'primary'}
             >
               {selectedFile?.name}
@@ -144,25 +150,25 @@ const UploadFileDialog = () => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button 
+          <Button
             onClick={handleClose}
             sx={{
               borderRadius: 10,
-              color: `${theme.palette.mode === 'dark' ? "text.secondary" : 'primary.dark'}`,
+              color: `${theme.palette.mode === 'dark' ? 'text.secondary' : 'primary.dark'}`,
               '&:hover': {
-                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`
+                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`,
               },
             }}
           >
             Cancel
           </Button>
-          <Button 
-            onClick={handleSubmit} 
+          <Button
+            onClick={handleSubmit}
             sx={{
               borderRadius: 10,
-              color: `${theme.palette.mode === 'dark' ? "text.secondary" : 'primary.dark'}`,
+              color: `${theme.palette.mode === 'dark' ? 'text.secondary' : 'primary.dark'}`,
               '&:hover': {
-                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`
+                backgroundColor: `${theme.palette.mode === 'dark' ? 'primary.dark' : 'success.light'}`,
               },
             }}
           >
@@ -171,9 +177,14 @@ const UploadFileDialog = () => {
         </DialogActions>
       </Dialog>
       {loading && <Loading open={loading} />}
-      <Toast open={openToast} setOpen={setOpenToast} message={message} severity={severity}/>
+      <Toast
+        open={openToast}
+        setOpen={setOpenToast}
+        message={message}
+        severity={severity}
+      />
     </>
   );
-}
+};
 
 export default UploadFileDialog;

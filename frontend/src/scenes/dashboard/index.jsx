@@ -112,6 +112,11 @@ const Dashboard = () => {
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           borderRadius={10}
+          sx={{
+            boxShadow: theme.palette.mode === 'dark' ? 
+            '4px 4px 10px rgba(0, 0, 0, 0.25)' : 
+            '8px 8px 10px rgba(0, 0, 0, 0.25)',
+          }}
         >
           <Box
             mt="25px"
@@ -161,6 +166,11 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           p="30px"
           borderRadius={10}
+          sx={{
+            boxShadow: theme.palette.mode === 'dark' ? 
+            '4px 4px 10px rgba(0, 0, 0, 0.25)' : 
+            '8px 8px 10px rgba(0, 0, 0, 0.25)',
+          }}
         >
           <Typography
             variant="h3"
@@ -182,6 +192,11 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           p="30px"
           borderRadius={10}
+          sx={{
+            boxShadow: theme.palette.mode === 'dark' ? 
+            '4px 4px 10px rgba(0, 0, 0, 0.25)' : 
+            '8px 8px 10px rgba(0, 0, 0, 0.25)',
+          }}
         >
           <Typography variant="h5" fontWeight="600">
             Statistics
@@ -208,6 +223,11 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           overflow={'auto'}
           borderRadius={10}
+          sx={{
+            boxShadow: theme.palette.mode === 'dark' ? 
+            '4px 4px 10px rgba(0, 0, 0, 0.25)' : 
+            '8px 8px 10px rgba(0, 0, 0, 0.25)',
+          }}
         >
           <Box
             display={'flex'}
@@ -247,6 +267,11 @@ const Dashboard = () => {
                 p="5px 10px"
                 borderRadius="4px"
                 fontSize={'18px'}
+                sx={{
+                  boxShadow: theme.palette.mode === 'dark' ? 
+                  '4px 4px 10px rgba(0, 0, 0, 0.25)' : 
+                  '8px 8px 10px rgba(0, 0, 0, 0.25)',
+                }}
               >
                 {moment(conceptObj.updatedAt).fromNow()}
               </Box>
